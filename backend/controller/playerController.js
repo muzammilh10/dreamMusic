@@ -17,7 +17,23 @@ exports.deleteOne = Model =>
 
 exports.updateOne = Model =>
   catchAsync(async (req, res, next) => {
-    const doc = await Model.findByIdAndUpdate(req.params.id, req.body, {
+
+    console.log({ rereq: req.body, params: req.params.id });
+
+    // Correcting the data to match the schema
+    const songData = {
+      title: req.body.title,
+      image: req.body.image,
+      artist: req.body.singer, // Correct field name
+      duration: parseFloat(req.body.duration.replace(':', '.')), // Convert duration to a number
+      path: req.body.path
+    };
+
+    const update = {
+      $push: { songs: songData }
+    };
+
+    const doc = await Model.findOneAndUpdate({ uniqueId: req.params.id }, update, {
       new: true,
       runValidators: true
     });
@@ -27,7 +43,7 @@ exports.updateOne = Model =>
     }
 
     res.status(200).json({
-      status: 'success updated',
+      status: 'success',
       data: {
         data: doc
       }

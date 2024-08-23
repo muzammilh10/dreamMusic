@@ -38,9 +38,9 @@ const { Schema } = mongoose;
 const songSchema = new Schema({
   image: String,
   title: String,
-  artist: String,
-  duration: Number,
-  path:String
+  artist: String, // Make sure this matches your input data
+  duration: String, // Change to String if needed
+  path: String
 });
 
 const playlistSchema = new Schema({
