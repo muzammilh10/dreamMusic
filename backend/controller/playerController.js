@@ -62,22 +62,18 @@ exports.createOne = Model =>
     });
   });
 
-exports.getOne = (Model, popOptions) =>
+exports.getOne = (Model) =>
   catchAsync(async (req, res, next) => {
-    console.log(" uniqueId")
+    console.log(" uniqueId", req.params)
     let query
     if (req.params.id) {
       let uniqueId = req.params.id
-      query = Model.find({ uniqueId });
+      console.log(uniqueId)
+      query = await Model.find({ _id:req.params.id });
     }
-    const userId = req.user._id;
+    console.log({query})
 
-    query = Model.find({ userId });
-    if (popOptions) query = query.populate(popOptions);
-    const doc = await query;
-    console.log({ doc })
-
-    if (!doc) {
+    if (!query) {
       console.log("No document found with that ID")
       return next(new AppError('No document found with that ID', 404));
     }
@@ -85,7 +81,7 @@ exports.getOne = (Model, popOptions) =>
     res.status(200).json({
       status: 'success',
       data: {
-        data: doc
+        data: query
       }
     });
   });
