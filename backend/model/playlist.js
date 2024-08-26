@@ -1,6 +1,6 @@
 
 const mongoose = require('mongoose');
-const { Schema } = mongoose;
+const { Schema, ObjectId } = mongoose;
 
 // [
 //   {
@@ -50,6 +50,10 @@ const playlistSchema = new Schema({
     required: true,
   },
   songs: [songSchema],
+  user: {
+    type: ObjectId,
+    ref: "User",
+  },
 });
 
 const Playlist = mongoose.model('Playlist', playlistSchema);
