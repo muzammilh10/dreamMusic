@@ -28,7 +28,9 @@ app.use(cookieParser());
 
 app.use("/api/user", userRoutes)
 app.use('/api/playlist',playerRouter)
-
+app.use('/',(req,res) => {
+  res.json('hellloooooooo')
+})
 
 
 app.use(globalErrorHandler)
