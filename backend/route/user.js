@@ -41,6 +41,13 @@ router.post("/login", async (req, res) => {
 });
 
 router.post("/register", async (req, res) => {
+  const { email } = req.body;
+
+  // Check if the email already exists
+  const existingUser = await User.findOne({ email });
+  if (existingUser) {
+    return res.status(400).json({ error: "Email already exists" });
+  }
   const user = await User.create(req.body);
 
 
@@ -63,7 +70,7 @@ router.post("/register", async (req, res) => {
 
 router.use(protect);
 
-router.post('/', getOne(User,Playlist))
+router.post('/', getOne(User, Playlist))
 
 router.post('/playlists', async (req, res) => {
   try {
@@ -73,10 +80,10 @@ router.post('/playlists', async (req, res) => {
 
     // Create a new playlist
     const playlist = new Playlist({
-      uniqueId: Date.now(), 
+      uniqueId: Date.now(),
       name,
       songs,
-      user: userId 
+      user: userId
     });
 
     // Save the playlist to the database
